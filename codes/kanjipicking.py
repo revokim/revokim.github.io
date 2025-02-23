@@ -30,7 +30,7 @@ def create_unique_filename(base_name, extension):
     counter = 1
     filename = f"{base_name}.{extension}"
     while os.path.exists(filename):
-        filename = f"{base_name}_{counter}.{extension}"
+        filename = f"{base_name}.{extension}"
         counter += 1
     return filename
 
@@ -40,7 +40,11 @@ with open(filename, mode='w', newline='', encoding='utf-8') as file:
     writer = csv.writer(file)
     writer.writerow(["한자", "히라가나", "한글"])
     for reading in random_readings:
-        kanji, hiragana, hangul = reading.split()
-        writer.writerow([kanji, hiragana, hangul])
+        parts = reading.split()
+        if len(parts) == 3:
+            kanji, hiragana, hangul = parts
+            writer.writerow([kanji, hiragana, hangul])
+        else:
+            print(f"Skipping invalid reading: {reading}")
 
 print(f"File {filename} created successfully.")
